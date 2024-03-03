@@ -14,13 +14,7 @@ import (
 
 func FindAverageSpeedFromData(c *gin.Context) {
 
-	rd, err := config.GetRedisConnection()
-
-	if err != nil {
-		response.ErrorResponse(c, 500, "oops something wrong", err, nil)
-		return
-	}
-
+	var rd = config.RedisConn
 	val, err := rd.Get(c, "country").Result()
 	fmt.Println("VAL", val)
 	if err == nil {

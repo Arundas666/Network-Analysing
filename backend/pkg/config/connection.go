@@ -1,14 +1,20 @@
 package config
 
 import (
+	"fmt"
+
 	"github.com/go-redis/redis/v9"
 )
 
-type RedisConnection struct {
-	Conn *redis.Client
-}
+var RedisConn *redis.Client
 
-var singletonRedis *RedisConnection
+func init() {
+	redis, err := GetRedisConnection()
+	if err != nil {
+		fmt.Println(err)
+	}
+	RedisConn = redis
+}
 
 func GetRedisConnection() (*redis.Client, error) {
 	opt, err := redis.ParseURL("rediss://default:ba29eda96217425197e2d53fc7ef30f6@us1-more-skylark-40395.upstash.io:40395")
