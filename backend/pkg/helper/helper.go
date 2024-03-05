@@ -134,7 +134,6 @@ func CreateSyntheticDataSet() error {
 	}
 	file, err := os.Create("data.csv")
 	if err != nil {
-
 		log.Fatal("Cannot create file", err)
 		return err
 	}

@@ -1,4 +1,5 @@
 package models
+
 type Data struct{	
 	Country string
 	State string

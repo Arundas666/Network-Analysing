@@ -73,10 +73,10 @@ func NetworkSpeedInStates(c *gin.Context) {
 	Id, _ := strconv.Atoi(countryIp.Country)
 
 	var rd = config.RedisConn
-	val, err := rd.Get(c, "state").Result()
+	val, err := rd.Get(c, countryIp.Country).Result()
 	if err == nil {
 		// Unmarshal the JSON string into an instance of CountryData
-		var stateData []response.ResponseData
+		var stateData []response.StateResponse
 		err = json.Unmarshal([]byte(val), &stateData)
 		if err != nil {
 			response.ErrorResponse(c, 500, "failed to unmarshal data", err, nil)
@@ -100,7 +100,7 @@ func NetworkSpeedInStates(c *gin.Context) {
 	}
 
 	// Store the serialized data in Redis
-	err = rd.Set(c, "state", dataString, 0).Err()
+	err = rd.Set(c, countryIp.Country, dataString, 0).Err()
 	if err != nil {
 		response.ErrorResponse(c, 500, "failed to store data in Redis", err, nil)
 		return
@@ -108,3 +108,4 @@ func NetworkSpeedInStates(c *gin.Context) {
 	response.SuccessResponse(c, 200, "succesfully created data set", data)
 
 }
+
