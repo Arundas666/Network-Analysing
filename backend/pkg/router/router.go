@@ -9,12 +9,9 @@ import (
 
 func Router(r *gin.RouterGroup) {
 
-	r.Group("/", middleware.CorsMiddleware)
-	{
+	r.GET("/find-avg", middleware.CorsMiddleware, handlers.FindAverageSpeedFromData)
+	r.GET("/avg-in-states", middleware.CorsMiddleware, handlers.NetworkSpeedInStates)
 
-		r.GET("/find-avg", handlers.FindAverageSpeedFromData)
-		r.GET("/avg-in-states", handlers.NetworkSpeedInStates)
-	}
 	r.GET("/create-data", handlers.CreateDataSet)
 
 }
