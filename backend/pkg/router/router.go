@@ -10,7 +10,7 @@ import (
 func Router(r *gin.RouterGroup) {
 
 	r.GET("/find-avg", middleware.CorsMiddleware, handlers.FindAverageSpeedFromData)
-	r.GET("/avg-in-states", middleware.CorsMiddleware, handlers.NetworkSpeedInStates)
+	r.GET("/avg-in-states/:id", middleware.CorsMiddleware, handlers.NetworkSpeedInStates)
 
 	r.GET("/create-data", handlers.CreateDataSet)
 

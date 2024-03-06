@@ -61,19 +61,20 @@ func CreateDataSet(c *gin.Context) {
 }
 
 func NetworkSpeedInStates(c *gin.Context) {
-	type Country struct {
-		Country string `json:"country"`
-	}
-	var countryIp Country
+	id := c.Param("id")
+	// type Country struct {
+	// 	Country string `json:"country"`
+	// }
+	// var countryIp Country
 
-	if err := c.ShouldBindJSON(&countryIp); err != nil {
-		response.ErrorResponse(c, 400, "error in binding json", err, nil)
-		return
-	}
-	Id, _ := strconv.Atoi(countryIp.Country)
+	// if err := c.ShouldBindJSON(&countryIp); err != nil {
+	// 	response.ErrorResponse(c, 400, "error in binding json", err, nil)
+	// 	return
+	// }
+	// Id, _ := strconv.Atoi(countryIp.Country)
 
 	var rd = config.RedisConn
-	val, err := rd.Get(c, countryIp.Country).Result()
+	val, err := rd.Get(c, id).Result()
 	if err == nil {
 		// Unmarshal the JSON string into an instance of CountryData
 		var stateData []response.StateResponse
@@ -86,7 +87,7 @@ func NetworkSpeedInStates(c *gin.Context) {
 		response.SuccessResponse(c, 200, "successfully fetched using Redis", stateData)
 		return
 	}
-
+	Id, _ := strconv.Atoi(id)
 	data, err := usecase.NetworkSpeedInsideCountry(Id)
 	if err != nil {
 		response.ErrorResponse(c, 400, "oops someting went wrong", err, nil)
@@ -100,7 +101,7 @@ func NetworkSpeedInStates(c *gin.Context) {
 	}
 
 	// Store the serialized data in Redis
-	err = rd.Set(c, countryIp.Country, dataString, 0).Err()
+	err = rd.Set(c, id, dataString, 0).Err()
 	if err != nil {
 		response.ErrorResponse(c, 500, "failed to store data in Redis", err, nil)
 		return
@@ -108,4 +109,3 @@ func NetworkSpeedInStates(c *gin.Context) {
 	response.SuccessResponse(c, 200, "succesfully created data set", data)
 
 }
-
